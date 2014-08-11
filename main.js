@@ -8,6 +8,7 @@ var port = process.env.PORT || 3000;
 
 app.post("/post-recieve", function(req, res){
   hookContent = req.body;
+  console.log("post",req.body);
   res.json(hookContent);
 });
 
