@@ -31,6 +31,19 @@ app.get('/', function(req, res) {
   res.json(persistance.data);
 });
 
+app.get('/releases/:owner/:repo/:ref', function(req, res) {
+  var project = req.params['owner'] + '/' + req.params['repo'],
+      ref     = req.params['ref'];
+
+  if(persistance.isValidRepo(project, ref)) {
+    var tarBall = persistance.data[project][ref].file;
+
+    res.redirect(tarBall);
+  } else {
+    res.status(404).end();
+  }
+});
+
 var server = app.listen(port, function() {
   console.log('Listening on port %d', server.address().port);
 });
