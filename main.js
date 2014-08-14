@@ -28,7 +28,7 @@ app.post('/post-hook', function(req, res){
 });
 
 app.get('/', function(req, res) {
-  res.json(persistance.data);
+  res.json(persistance.fetch());
 });
 
 app.get('/releases/:owner/:repo/:ref', function(req, res) {
