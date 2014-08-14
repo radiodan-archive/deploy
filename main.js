@@ -35,6 +35,8 @@ app.get('/releases/:owner/:repo/:ref', function(req, res) {
   var project = req.params['owner'] + '/' + req.params['repo'],
       ref     = req.params['ref'];
 
+  persistance.fetch();
+
   if(persistance.isValidRepo(project, ref)) {
     var tarBall = persistance.data[project][ref].file;
 
