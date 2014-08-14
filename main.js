@@ -28,7 +28,18 @@ app.post('/post-hook', function(req, res){
 });
 
 app.get('/', function(req, res) {
-  res.json(persistance.fetch());
+  var url = req.protocol + '://' + req.get('x-forwarded-host'),
+      repos = persistance.fetch();
+
+  for(var project in repos) {
+    for(var ref in repos[project]) {
+      if(repos[project][ref].hasOwnProperty("file")) {
+        repos[project][ref]["file"] = url + repos[project][ref]["file"];
+      }
+    }
+  }
+
+  res.json(repos);
 });
 
 app.get('/releases/:owner/:repo/:ref', function(req, res) {
