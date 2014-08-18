@@ -3,13 +3,14 @@ var express        = require('express'),
     methodOverride = require('method-override'),
     morgan         = require('morgan'),
     logfmt         = require('logfmt'),
+    verifySecrets  = require(__dirname + '/lib/verify-secrets'),
     Deployment     = require(__dirname + '/lib/deployment'),
     persistance    = require(__dirname + '/lib/persistance').create();
 
 var app  = express(),
     port = (process.env.PORT || 3000);
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ verify: verifySecrets }));
 app.use(methodOverride());
 app.use(morgan('combined'));
 app.use(logfmt.requestLogger());
@@ -17,8 +18,8 @@ app.use(express.static(__dirname + "/public"));
 
 app.post('/post-hook', function(req, res){
   try {
-    var deploy = Deployment.create(req.body);
-    deploy.deploy();
+    Deployment.create(req.body)
+      .then(function(deploy){ deploy.deploy(); });
 
     res.status(200).end();
   } catch(err) {

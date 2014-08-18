@@ -3,3 +3,4 @@ node_modules
 db.json
 whitelist.json
 *.tar.gz
+npm-debug.log
