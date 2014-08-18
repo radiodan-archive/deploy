@@ -17,15 +17,15 @@ app.use(logfmt.requestLogger());
 app.use(express.static(__dirname + "/public"));
 
 app.post('/post-hook', function(req, res){
-  try {
-    Deployment.create(req.body)
-      .then(function(deploy){ deploy.deploy(); });
-
-    res.status(200).end();
-  } catch(err) {
-    console.warn(err);
-    res.status(500).end();
-  }
+  Deployment.create(req.body)
+    .then(function(deploy) {
+      deploy.deploy();
+      res.status(200).end();
+    },
+    function(err) {
+      console.warn(err);
+      res.status(500).end();
+    });
 });
 
 app.get('/', function(req, res) {
