@@ -29,8 +29,14 @@ app.post('/post-hook', function(req, res){
 });
 
 app.get('/', function(req, res) {
-  var url = req.protocol + '://' + req.get('x-forwarded-host'),
-      repos = persistance.fetch();
+  var repos = persistance.fetch(),
+      url;
+
+  if(req.get('x-forwarded-host')) {
+    url = req.protocol + '://' + req.get('x-forwarded-host');
+  } else {
+    url = req.protocol + '://' + req.host + ':' + port;
+  }
 
   for(var project in repos) {
     for(var ref in repos[project]) {
