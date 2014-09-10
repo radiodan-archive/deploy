@@ -14,3 +14,9 @@ A quick and simple deployment server.
    Set to only send commit events. Don't forget to use the secret key!
 3. Add the repo name to `whitelist.json`, otherwise the server will not accept
    the webhook request.
+
+## Optional Steps
+
+* You can add bespoke versions of npm modules as tarballs in `precompiled-npm`.
+  Any matched modules in `optionalDependencies` or `dependencies` will use
+  this tarball instead of fetching from npm.
