@@ -37,6 +37,10 @@ app.post('/post-hook', function(req, res){
         function(deploy) {
           deploy.erase();
           res.status(200).end();
+        },
+        function(err) {
+          console.warn(err);
+          res.status(500).end();
         });
       break;
     default:
