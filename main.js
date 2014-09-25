@@ -4,6 +4,7 @@ var express        = require('express'),
     morgan         = require('morgan'),
     logfmt         = require('logfmt'),
     verifySecrets  = require(__dirname + '/lib/verify-secrets'),
+    determineAction= require(__dirname + '/lib/determine-action'),
     Deployment     = require(__dirname + '/lib/deployment'),
     persistance    = require(__dirname + '/lib/persistance').create();
 
@@ -17,15 +18,30 @@ app.use(logfmt.requestLogger());
 app.use(express.static(__dirname + "/public"));
 
 app.post('/post-hook', function(req, res){
-  Deployment.create(req.body)
-    .then(function(deploy) {
-      deploy.deploy();
-      res.status(200).end();
-    },
-    function(err) {
-      console.warn(err);
-      res.status(500).end();
-    });
+  var action = determineAction(req.body);
+
+  switch(action) {
+    case 'deploy':
+      Deployment.create(req.body).then(
+        function(deploy) {
+          deploy.deploy();
+          res.status(200).end();
+        },
+        function(err) {
+          console.warn(err);
+          res.status(500).end();
+        });
+      break;
+    case 'erase':
+      Deployment.create(req.body).then(
+        function(deploy) {
+          deploy.erase();
+          res.status(200).end();
+        });
+      break;
+    default:
+      console.warn('Don\'t know what to do with', action);
+  }
 });
 
 app.get('/', function(req, res) {
