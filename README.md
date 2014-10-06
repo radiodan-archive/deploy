@@ -20,3 +20,6 @@ A quick and simple deployment server.
 * You can add bespoke versions of npm modules as tarballs in `precompiled-npm`.
   Any matched modules in `optionalDependencies` or `dependencies` will use
   this tarball instead of fetching from npm.
+
+* Go project support has been added. Please ensure `go` and `godeps` have been
+  installed to `/opt/go/bin`.
